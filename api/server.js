@@ -15,7 +15,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (_, res) => res.send('Hello World!'));
 
-app.get('/photos', (req, res) => {});
+app.get('/photos', async (req, res) => {
+  const s = req.query.s || '';
+  try {
+    const photos = await Photo.find({ label: { $regex: s, $options: 'i' } });
+    res.status(200).json({ status: 'success', data: photos });
+  } catch (err) {
+    return res.status(500).json({ status: 'error', message: err.message });
+  }
+});
 
 app.post('/photos', multer.single('photo'), async (req, res) => {
   const photo = req.file;
