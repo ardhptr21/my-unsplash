@@ -38,11 +38,23 @@ app.post('/photos', multer.single('photo'), async (req, res) => {
     console.log(err);
     return res.status(500).json({ status: 'error', message: err.message });
   }
-
-  return res.send('oke');
 });
 
-app.delete('/photos/d/:label', (req, res) => {});
+app.delete('/photos/d/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const photo = await Photo.findByIdAndDelete({ _id: id });
+    if (!photo) {
+      return res.status(404).json({ status: 'error', message: 'Photo not found' });
+    }
+
+    await cloudinary.uploader.destroy(photo.public_id);
+
+    return res.status(200).json({ status: 'success', message: 'Photo deleted', photo_id: photo._id });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+});
 
 const PORT = process.env.PORT || 8080;
 
