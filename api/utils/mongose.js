@@ -16,12 +16,13 @@ function dbConnect(cb) {
   });
 }
 
-export const Photos = mongoose.model(
-  'Photos',
+export const Photo = mongoose.model(
+  'Photo',
   new mongoose.Schema(
     {
       label: String,
       url: String,
+      public_id: String,
     },
     {
       timestamps: true,
