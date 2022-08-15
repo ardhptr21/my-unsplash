@@ -111,6 +111,7 @@
 
 <script>
 import Button from "./Button.vue";
+import { useToast } from "vue-toastification";
 
 const API_BASE_URL =
   process.env.VUE_APP_API_BASE_URL || "http://localhost:8080";
@@ -118,6 +119,12 @@ const API_BASE_URL =
 export default {
   name: "AddPhotoModalComponent",
   components: { Button },
+  setup() {
+    const toast = useToast({
+      position: "bottom-right",
+    });
+    return { toast };
+  },
   data() {
     return {
       photoType: "",
@@ -167,8 +174,10 @@ export default {
           body: formData,
         }).then((r) => r.json());
         this.setPhotos(result.data);
+        this.toast.success(result.message);
       } catch (err) {
         console.log(err);
+        this.toast.error("Something when wrong when adding photo");
       } finally {
         this.isLoading = false;
         this.setIsOpen(false);

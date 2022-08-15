@@ -42,7 +42,7 @@ app.post('/photos', multer.single('photo'), async (req, res) => {
         url: result.secure_url,
         public_id: result.public_id,
       });
-      return res.status(201).json({ status: 'success', data: photoResult });
+      return res.status(201).json({ status: 'success', data: photoResult, message: 'Photo added successfully' });
     }
 
     if (url && !photo) {
@@ -50,7 +50,7 @@ app.post('/photos', multer.single('photo'), async (req, res) => {
         label,
         url,
       });
-      return res.status(201).json({ status: 'success', data: photoResult });
+      return res.status(201).json({ status: 'success', data: photoResult, message: 'Photo added successfully' });
     }
   } catch (err) {
     console.log(err);
@@ -70,7 +70,7 @@ app.delete('/photos/d/:id', async (req, res) => {
       await cloudinary.uploader.destroy(photo.public_id);
     }
 
-    return res.status(200).json({ status: 'success', message: 'Photo deleted', photo_id: photo._id });
+    return res.status(200).json({ status: 'success', message: 'Photo deleted successfully', photo_id: photo._id });
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }

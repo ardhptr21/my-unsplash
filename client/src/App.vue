@@ -6,7 +6,12 @@
         v-for="(photo, idx) in photos"
         :photo="photo.url"
         :label="photo.label"
+        :photoId="photo._id"
         :alt="photo.label"
+        :filtering="
+          (photoId) =>
+            (photos = photos.filter((photo) => photo._id !== photoId))
+        "
         :key="idx"
       />
     </div>
