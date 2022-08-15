@@ -11,6 +11,7 @@
       duration-300
       text-white
       rounded-xl
+      disabled:bg-green-800
     "
   >
     {{ text }}

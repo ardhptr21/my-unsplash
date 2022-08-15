@@ -27,21 +27,31 @@ app.get('/photos', async (req, res) => {
 
 app.post('/photos', multer.single('photo'), async (req, res) => {
   const photo = req.file;
-  const label = req.body.label;
+  const { label, url } = req.body;
 
-  if (!photo) {
-    return res.status(400).send({ status: 'error', message: 'Photo not provided' });
+  if (!photo && !url) {
+    return res.status(400).send({ status: 'error', message: 'Photo file or url not provided' });
   }
 
   const folder = APP_NAME.split(' ').join('-').toLowerCase() + '/photos';
   try {
-    const result = await cloudinary.uploader.upload(photo.path, { folder });
-    const photoResult = await Photo.create({
-      label,
-      url: result.secure_url,
-      public_id: result.public_id,
-    });
-    return res.status(201).json({ status: 'success', data: photoResult });
+    if (photo && !url) {
+      const result = await cloudinary.uploader.upload(photo.path, { folder });
+      const photoResult = await Photo.create({
+        label,
+        url: result.secure_url,
+        public_id: result.public_id,
+      });
+      return res.status(201).json({ status: 'success', data: photoResult });
+    }
+
+    if (url && !photo) {
+      const photoResult = await Photo.create({
+        label,
+        url,
+      });
+      return res.status(201).json({ status: 'success', data: photoResult });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ status: 'error', message: err.message });
@@ -56,7 +66,9 @@ app.delete('/photos/d/:id', async (req, res) => {
       return res.status(404).json({ status: 'error', message: 'Photo not found' });
     }
 
-    await cloudinary.uploader.destroy(photo.public_id);
+    if (photo.public_id) {
+      await cloudinary.uploader.destroy(photo.public_id);
+    }
 
     return res.status(200).json({ status: 'success', message: 'Photo deleted', photo_id: photo._id });
   } catch (err) {

@@ -49,6 +49,7 @@
     />
     <AddPhotoModal
       :isOpen="isModalOpen"
+      :setPhotos="setPhotos"
       :setIsOpen="(val) => (isModalOpen = val)"
     />
   </nav>
@@ -61,6 +62,9 @@ import AddPhotoModal from "./AddPhotoModal.vue";
 
 export default {
   name: "NavbarComponent",
+  props: {
+    setPhotos: Function,
+  },
   components: {
     Button,
     AddPhotoModal,

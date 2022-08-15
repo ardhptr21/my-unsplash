@@ -1,6 +1,6 @@
 <template>
   <main class="max-w-6xl container mx-auto pb-10">
-    <Navbar />
+    <Navbar :setPhotos="(photo) => (photos = [...photos, photo])" />
     <div class="columns-3 space-y-5">
       <PhotoItem
         v-for="(photo, idx) in photos"
