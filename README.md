@@ -6,7 +6,7 @@
 
 <div align="center">
   <h3>
-    <a href="http://localhost:3000">
+    <a href="https://unsplash-fresh.netlify.app/">
       Demo
     </a>
     <span> | </span>
