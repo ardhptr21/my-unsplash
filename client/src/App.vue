@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-6xl container mx-auto pb-10">
+  <main class="max-w-6xl container mx-auto pb-16">
     <Navbar :setPhotos="(photo) => (photos = [...photos, photo])" />
     <div class="columns-3 space-y-5">
       <PhotoItem
@@ -15,11 +15,13 @@
         :key="idx"
       />
     </div>
+    <Footer />
   </main>
 </template>
 <script>
 import Navbar from "./components/Navbar.vue";
 import PhotoItem from "./components/PhotoItem.vue";
+import Footer from "./components/Footer.vue";
 
 const API_BASE_URL =
   process.env.VUE_APP_API_BASE_URL || "http://localhost:8080";
@@ -38,6 +40,7 @@ export default {
   components: {
     Navbar,
     PhotoItem,
+    Footer,
   },
 };
 </script>
