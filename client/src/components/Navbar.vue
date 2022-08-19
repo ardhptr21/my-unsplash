@@ -31,7 +31,9 @@
         </div>
         <input
           type="search"
+          v-bind="search"
           placeholder="Search by name"
+          @input="this.$emit('search', $event.target.value)"
           class="
             placeholder:text-gray-300
             h-full
@@ -64,6 +66,7 @@ export default {
   name: "NavbarComponent",
   props: {
     setPhotos: Function,
+    search: String,
   },
   components: {
     Button,

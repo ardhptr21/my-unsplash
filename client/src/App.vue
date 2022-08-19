@@ -1,6 +1,9 @@
 <template>
   <main class="max-w-6xl container mx-auto pb-16">
-    <Navbar :setPhotos="(photo) => (photos = [...photos, photo])" />
+    <Navbar
+      :setPhotos="(photo) => (photos = [...photos, photo])"
+      @search="handleSearch"
+    />
     <div class="columns-3 space-y-5">
       <PhotoItem
         v-for="(photo, idx) in photos"
@@ -22,6 +25,7 @@
 import Navbar from "./components/Navbar.vue";
 import PhotoItem from "./components/PhotoItem.vue";
 import Footer from "./components/Footer.vue";
+import debounce from "./utils/debounce";
 
 const API_BASE_URL =
   process.env.VUE_APP_API_BASE_URL || "http://localhost:8080";
@@ -31,10 +35,22 @@ export default {
   data() {
     return {
       photos: [],
+      search: "",
     };
   },
+  methods: {
+    handleSearch: debounce(async function (search) {
+      this.search = search;
+      const result = await fetch(
+        `${API_BASE_URL}/photos?s=${this.search}`
+      ).then((r) => r.json());
+      this.photos = result.data;
+    }, 500),
+  },
   async mounted() {
-    const result = await fetch(`${API_BASE_URL}/photos`).then((r) => r.json());
+    const result = await fetch(`${API_BASE_URL}/photos?s=${this.search}`).then(
+      (r) => r.json()
+    );
     this.photos = result.data;
   },
   components: {
